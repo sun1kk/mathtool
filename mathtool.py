@@ -37,3 +37,23 @@ elif len(args) == 7:
         raw_a = args[2]
         raw_b = args[4]
         raw_c = args[6]
+    else:
+        print("ОШИБКА: неверные параметры", file=sys.stderr)
+        sys.exit(1)
+else:
+    print("ОШИБКА: неверное количество параметров", file=sys.stderr)
+    sys.exit(1)
+
+# 2. Переводим строки в целые числа
+try:
+    a = int(raw_a)
+    b = int(raw_b)
+    c = int(raw_c)
+except ValueError:
+    print("ОШИБКА: коэффициент не является целым числом", file=sys.stderr)
+    sys.exit(1)
+
+# 3. Проверяем диапазон [-10000, 10000]
+if abs(a) > MAX_VALUE or abs(b) > MAX_VALUE or abs(c) > MAX_VALUE:
+    print("ОШИБКА: значение вне допустимого диапазона", file=sys.stderr)
+    sys.exit(1)
