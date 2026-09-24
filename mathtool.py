@@ -76,11 +76,11 @@ else:
     if d > 0:
         x1 = (-b + math.sqrt(d)) / (2 * a)
         x2 = (-b - math.sqrt(d)) / (2 * a)
-        print(f"x1 = {x1:.3f}")
-        print(f"x2 = {x2:.3f}")
+        print(f"x1={x1:.3f}")
+        print(f"x2={x2:.3f}")
     elif d == 0:
         x = -b / (2 * a)
-        print(f"x = {x:.3f}")
+        print(f"x={x:.3f}")
     else:
         print("Действительных корней нет")
     
