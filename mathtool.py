@@ -61,6 +61,15 @@ def handle_stats(args):
         values = read_numbers(sys.stdin)
 
     stats.check_numbers(values)
+
+    # Печать всех показателей одним циклом по таблице
+    for label, function, form in stats.REPORT:
+        value = function(values)
+        if value is None:
+            print(f"{label}: НЕ СУЩЕСТВУЕТ")
+        else:
+            print(f"{label}: {value:{form}}")
+
     return 0
 
 
