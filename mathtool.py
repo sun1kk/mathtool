@@ -2,42 +2,27 @@ import sys
 from calc import equation
 from cli import build_parser
 
-# 1. Разбор параметров командной строки
-parser = build_parser()
-args = parser.parse_args(sys.argv[1:])
 
-# Команда не указана — справка и код 0
-if args.command is None:
-    parser.print_help()
-    sys.exit(0)
-
-if args.command == "solve":
-    # 2. Получение коэффициентов: либо все три, либо ни одного
+def handle_solve(args):
+    """Обработчик команды solve. Возвращает код завершения."""
+    # Коэффициенты: либо все три, либо ни одного
     if args.a is None and args.b is None and args.c is None:
         try:
             a = int(input("Введите A: "))
             b = int(input("Введите B: "))
             c = int(input("Введите C: "))
         except ValueError:
-            print("ОШИБКА: коэффициент не является целым числом", file=sys.stderr)
-            sys.exit(1)
+            raise ValueError("коэффициент не является целым числом")
     elif args.a is not None and args.b is not None and args.c is not None:
         a = args.a
         b = args.b
         c = args.c
     else:
-        print("ОШИБКА: укажите все три коэффициента либо ни одного", file=sys.stderr)
-        sys.exit(1)
+        raise ValueError("укажите все три коэффициента либо ни одного")
 
-    # 3. Проверка и 4. Расчёт — через модуль calc
-    try:
-        equation.check_coefficients(a, b, c)
-        kind, d, roots = equation.solve(a, b, c)
-    except ValueError as error:
-        print(f"ОШИБКА: {error}", file=sys.stderr)
-        sys.exit(1)
+    equation.check_coefficients(a, b, c)
+    kind, d, roots = equation.solve(a, b, c)
 
-    # 5. Печать результата
     if kind == "линейное":
         print("Уравнение линейное")
         print(f"x = {roots[0]:.3f}")
@@ -52,4 +37,28 @@ if args.command == "solve":
         else:
             print("Действительных корней нет")
 
-    sys.exit(0)
+    return 0
+
+
+HANDLERS = {
+    "solve": handle_solve,
+}
+
+
+def main(argv):
+    parser = build_parser()
+    args = parser.parse_args(argv)
+
+    if args.command is None:
+        parser.print_help()
+        return 0
+
+    try:
+        return HANDLERS[args.command](args)
+    except (ValueError, OSError) as error:
+        print(f"ОШИБКА: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
