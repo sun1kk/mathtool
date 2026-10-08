@@ -1,6 +1,7 @@
 import argparse
 
 from calc.series import FORMULAS
+from calc.integration import FUNCTIONS
 
 def build_parser():
     """Создаёт и возвращает разборщик параметров командной строки."""
@@ -45,7 +46,9 @@ def build_parser():
     integrate = subparsers.add_parser(
         "integrate", help="численное интегрирование", allow_abbrev=False
     )
-    integrate.add_argument("--func", required=True, help="какую функцию интегрировать")
+  integrate.add_argument(
+        "--func", required=True, choices=sorted(FUNCTIONS), help="какую функцию интегрировать"
+    )
     integrate.add_argument(
         "--from", dest="start", type=float, required=True, help="нижний предел интегрирования"
     )

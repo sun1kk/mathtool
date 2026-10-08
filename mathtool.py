@@ -1,5 +1,5 @@
 import sys
-from calc import equation, stats, series
+from calc import equation, stats, series, integration
 from cli import build_parser
 
 
@@ -94,11 +94,23 @@ def handle_series(args):
     print(f"Сумма ряда: {result:.{series.DIGITS}f}")
     return 0
 
+def handle_integrate(args):
+    """Обработчик команды integrate. Возвращает код завершения."""
+    # Проверка параметров — до любого вывода
+    integration.check_params(args.func, args.start, args.to, args.steps)
+
+    function, formula = integration.FUNCTIONS[args.func][:2]
+    result = integration.integrate(function, args.start, args.to, args.steps)
+
+    print(formula)
+    print(f"Значение интеграла: {result:.{integration.DIGITS}f}")
+    return 0
 
 HANDLERS = {
     "solve": handle_solve,
     "stats": handle_stats,
     "series": handle_series,
+    "integrate": handle_integrate,
 }
 
 def main(argv):
