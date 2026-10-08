@@ -1,5 +1,5 @@
 import sys
-from calc import equation, stats
+from calc import equation, stats, series
 from cli import build_parser
 
 
@@ -72,12 +72,34 @@ def handle_stats(args):
 
     return 0
 
+def handle_series(args):
+    """Обработчик команды series. Возвращает код завершения."""
+    # Проверка параметров — до любого вывода
+    if args.terms is not None:
+        series.check_terms(args.terms)
+    else:
+        series.check_eps(args.eps)
+
+    term, formula = series.FORMULAS[args.func]
+
+    # Расчёт по выбранному способу остановки
+    if args.terms is not None:
+        count = args.terms
+        result = series.sum_by_count(term, count)
+    else:
+        result, count = series.sum_by_eps(term, args.eps)
+
+    print(formula)
+    print(f"Слагаемых: {count}")
+    print(f"Сумма ряда: {result:.{series.DIGITS}f}")
+    return 0
+
 
 HANDLERS = {
     "solve": handle_solve,
     "stats": handle_stats,
+    "series": handle_series,
 }
-
 
 def main(argv):
     parser = build_parser()

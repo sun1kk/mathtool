@@ -1,5 +1,6 @@
 import argparse
 
+from calc.series import FORMULAS
 
 def build_parser():
     """Создаёт и возвращает разборщик параметров командной строки."""
