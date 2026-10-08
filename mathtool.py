@@ -20,7 +20,7 @@ def handle_solve(args):
     else:
         raise ValueError("укажите все три коэффициента либо ни одного")
 
-    equation.check_coefficients(a, b, c)
+    equation.check_coefficients({"A": a, "B": b, "C": c})
     kind, d, roots = equation.solve(a, b, c)
 
     if kind == "линейное":
