@@ -1,5 +1,5 @@
 import sys
-from calc import equation
+from calc import equation, stats
 from cli import build_parser
 
 
@@ -40,8 +40,33 @@ def handle_solve(args):
     return 0
 
 
+def read_numbers(source):
+    """Читает числа из открытого источника (файл или стандартный ввод)."""
+    values = []
+    for line in source:
+        for word in line.split():
+            try:
+                values.append(float(word))
+            except ValueError:
+                raise ValueError(f"{word} не является числом")
+    return values
+
+
+def handle_stats(args):
+    """Обработчик команды stats. Возвращает код завершения."""
+    if args.input is not None:
+        with open(args.input, encoding="utf-8-sig") as handle:
+            values = read_numbers(handle)
+    else:
+        values = read_numbers(sys.stdin)
+
+    stats.check_numbers(values)
+    return 0
+
+
 HANDLERS = {
     "solve": handle_solve,
+    "stats": handle_stats,
 }
 
 
